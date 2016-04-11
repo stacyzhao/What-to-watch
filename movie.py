@@ -1,6 +1,6 @@
 class Movie():
     def __init__(self, movie_id, title):
-        self.id = movie_id
+        self.id = int(movie_id)
         self.title = title
         self.ratings = []
 
@@ -17,3 +17,6 @@ class Movie():
             sum_of_rating += rating.score
         average_rating = sum_of_rating/len(self.ratings)
         return average_rating
+
+    def __eq__(self, other):
+        return self.id == other.id
