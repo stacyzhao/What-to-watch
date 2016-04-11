@@ -29,7 +29,7 @@ def get_movie_ratings():
         for row in reader:
             rating = Rating(row)
             movie_ratings.append(rating)
-            # user_ratings[row["user_id"]] = rating
+        # user_ratings[row["user_id"]] = rating
     return movie_ratings
 
 
@@ -38,23 +38,20 @@ def all_ratings_by_user(ratings, user_id):
     return [rating for rating in ratings if rating.user == user_id]
 
 def all_ratings_by_movie_id(movies, movie_id):
-    all_ratings = []
-    for movie_id, movie in movies.items():
-        if movie_id == movie_id:
-            all_ratings.append(movie.ratings)
-    return all_ratings
+    return [movie.ratings for movie_id, movie in movies.items() if movie_id == movie_id]
 # print (all_ratings_by_user(movie_ratings, 885))
 
 def get_movies_list_by_user_id(movies, user_id):
-    return [movies[rating.movie_id] for rating in all_ratings_by_user(movie_ratings, user_id)]
+    return [movies[rating.movie_id] for rating in all_ratings_by_user(get_movie_ratings(), user_id)]
 # print (get_movies_list_by_user_id(movies, 885))
 
 def not_rated_movie_list_by_user(movies, user_movie_list):
-    not_rated_movies = []
-    for movie_id, movie in movies.items():
-        if movie not in user_movie_list:
-            not_rated_movies.append(movie)
-    return not_rated_movies
+    return [movie for movie_id, movie in movies.items() if movie not in user_movie_list]
+    # not_rated_movies = []
+    # for movie_id, movie in movies.items():
+    #     if movie not in user_movie_list:
+    #         not_rated_movies.append(movie)
+    # return not_rated_movies
 # print (not_rated)
 # print (not_rated_movie_list_by_user(movies, get_movies_list_by_user_id(movies, 885)))
 
@@ -105,15 +102,15 @@ def options():
             print ("There are {} ratings for this movie!. \n".format(len(all_ratings_by_movie_id(movies, get_movie_id()))))
         elif option == 4:
             get_user_id = int(input("What's the user ID? "))
-            print("There are {} ratings by this user!. \n".format(len(all_ratings_by_user(get_movie_ratings(), get_user_id))))
+            print("There are {} ratings by this user!. \n".format(len(all_ratings_by_user(movie_ratings, get_user_id))))
         elif option == 5:
-            not_rated = not_rated_movie_list_by_user(movies, get_movies_list_by_user_id(movies, 555))
+            get_user_id = int(input("What's the user ID? "))
+            not_rated = not_rated_movie_list_by_user(movies, get_movies_list_by_user_id(movies, get_user_id))
             not_rated = sorted(not_rated, key=lambda movie: movie.average_rating())
             top_movies_list(filter_movies(not_rated), movies)
 
 
 def main():
-
     get_movie_ratings()
     options()
 
