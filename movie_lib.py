@@ -12,6 +12,8 @@ with open("u.user.csv") as f:
         user = User(row["user_id"], row["age"], row["zipcode"])
         users[user.id] = user
 
+    for key in users:
+        user = users[key]
 
 movies = {}
 
@@ -30,6 +32,10 @@ def get_movie_ratings():
             rating = Rating(row)
             movie_ratings.append(rating)
         # user_ratings[row["user_id"]] = rating
+        for rating in movie_ratings:
+            movie = movies[rating.movie_id]
+            movie.add_rating(rating)
+
     return movie_ratings
 
 
@@ -76,6 +82,7 @@ def top_movies_list(filtered_movies, movies):
             top_movie_list.append(movie.title)
             print (movie.title, ":", round(movie.average_rating(),2))
     # for key in reversed(sorted(top_movie_list)):
+    print ("\n ")
     #     print ("%s: %s" % (top_movie_list[key], key))
     return top_movie_list
 
@@ -101,10 +108,10 @@ def options():
         elif option == 3:
             print ("There are {} ratings for this movie!. \n".format(len(all_ratings_by_movie_id(movies, get_movie_id()))))
         elif option == 4:
-            get_user_id = int(input("What's the user ID? "))
+            get_user_id = int(input("What's the user ID? \n "))
             print("There are {} ratings by this user!. \n".format(len(all_ratings_by_user(movie_ratings, get_user_id))))
         elif option == 5:
-            get_user_id = int(input("What's the user ID? "))
+            get_user_id = int(input("What's the user ID? \n "))
             not_rated = not_rated_movie_list_by_user(movies, get_movies_list_by_user_id(movies, get_user_id))
             not_rated = sorted(not_rated, key=lambda movie: movie.average_rating())
             top_movies_list(filter_movies(not_rated), movies)
